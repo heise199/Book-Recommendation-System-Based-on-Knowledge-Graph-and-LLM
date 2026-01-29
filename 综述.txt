@@ -1,0 +1,76 @@
+在信息过载的互联网时代,推荐系统有着越来越重要的地位,它帮助用户在大量信息中找到所需要的内容.但是在推荐系统中常存在冷启动,数据稀疏的问题,用户隐含偏好挖掘不够深入,推荐结果实时性较差,缺乏系统的自我完善校正功能.目前由于数据获取较难,可用有效数据较少,用户行为偏好可提取性较差.推荐系统存在以下难点:(1)用户偏好灵活多变,选择偏差和曝光偏差,导致热门商品被反复推荐,用户潜在偏好挖掘不够深入,信息利用不够全面.(2)现有托攻击检测的研究大多依赖于用户的历史数据所呈现的显性虚假概貌去发现托攻击者.而社交网络中存在的用户繁衍传播和社交反馈性等重要特征没有被应用到托攻击者检测中.(3)冷启动和数据稀疏通常是不可避免的,同时会存在边信息不可用的情况.深度学习应用于推荐系统中依赖于大数据,限制了其在许多场景中的应用.为了提高推荐结果多样性,自适应性,安全性和准确性,本文提出了基于用户行为传播的动态知识图谱推荐系统研究,具体工作包括:(1)提出构建异构网络中动态知识图谱推荐系统(A Recommendation Approach Based on Heterogeneous Network and Dynamic Knowledge Graph,HN-DKG),根据用户在跨领域多平台的复合行为,挖掘多模态异质节点,构建异构网络图,进而建立基础知识图谱;利用图注意力网络(Graph attention network,GAT)组件的多头注意力机制,重点关注时序信息和知识图谱的图结构信息,实现多模态异质节点的关系增强,构建动态知识图谱;利用改进的Ripple Net发现用户的潜在兴趣,对预测商品评分并排序,其中设定了用户种子簇,传播阻断以及随机种子的机制,使得推荐结果更加准确,多样.采用公测数据集,与基线算法进行对比,实验表明所提方法在推荐的有效性和多样性上有较好的表现.另外消融实验也证明算法中各环节的有效性.(2)提出基于用户自治体的社交网络推荐安全检测方法(A security detection approach based on autonomy-oriented user sensor in social recommendation network,AOUSD),将用户模拟为具有自治能力的社会传感器.基于用户自治传感器在社交网络中的信息传播,信息反馈和信息消逝等机制构建社交推荐中用户的交互行为模型,并考虑与事件相关的可变时间函数生成基于社会传感器的用户关系动态知识图谱.采用层次聚类方法生成初步的可疑候选组,在动态知识图谱上应用图团体检测聚类方法来获取托攻击者.在Netlogo平台进行模拟仿真托攻击环境,测试AOUSD的性能,采用Amazon数据集进行实验,将所提出的AOUSD算法与其他算法进行比较.实验结果证明了所提AOUSD方法在托攻击检测效率和准确性上的优势.(3)提出基于对偶学习的混合推荐方法(A dual learning-based recommendation approach,DLRA),DLRA将推荐任务视为两个独立的子任务——主任务和对偶任务,这两个任务在DLRA中表现出很强的对偶性.最初的任务是以物品为中心的,目的是找到那些对物品评价较高的用户,而对偶任务是以用户为中心的,目的是向用户推荐最喜欢的物品.这两个任务在推荐空间,选择概率和推荐依据上具有很强的对偶性.基于Movielens和Book Crossing的数据集,模拟了数据稀疏和冷启动推荐场景.实验结果表明,DLRA在标记数据稀疏的情况下获得了显著的改善,并优于其他混合推荐方法和深度学习策略,具有更小的预测误差和更好的推荐精度.
+
+
+如何为用户提供个性化推荐并提高推荐的准确度和用户满意度,是当前推荐系统研究面临的主要问题.知识图谱的出现为推荐系统的改进提供了新的途径.本文研究了知识图谱近年来在推荐系统中的应用情况,从基于本体的推荐生成,基于开放链接数据的推荐生成以及基于图嵌入的推荐生成3个方面对研究现状进行了综述.在此基础上,提出了基于知识图谱的推荐系统总体框架,分析了其中涉及的关键技术,并对目前存在的重点和难点问题进行了讨论,指出了下一步需要开展的研究工作.
+
+In this work, we study recommendation systems modelled as contextual multi-armed bandit (MAB) problems. We propose a graph-based recommendation system that learns and exploits the geometry of the user space to create meaningful clusters in the user domain. This reduces the dimensionality of the recommendation problem while preserving the accuracy of MAB. We then study the effect of graph sparsity and clusters size on the MAB performance and provide exhaustive simulation results both in synthetic and in real-case datasets. Simulation results show improvements with respect to state-of-the-art MAB algorithms.
+
+
+Graph neural network has a good application effect in many application fields because of its characteristics, the combination of graph neural network and recommendation has become one of the research hot spots. Using graph neural network in recommendation can significantly improve the level of recommendation in complex environment. In this paper, the graph neural network method, personalized recommendation and group recommendation are introduced respectively. The recommendation methods based on graph neural network are summarized, focusing on graph neural network and its recent research achievements in the field of recommendation. The recommendation research status and the difficulties in further development are analyzed. According to the advantages of graph neural network, the feasibility of combining graph neural network with group recommendation is analyzed and prospected.
+
+
+In real-world applications, users express different behaviors when they interact with different items, including implicit click/like interactions, and explicit comments/reviews interactions. Nevertheless, almost all recommender works are focused on how to describe user preferences by the implicit click/like interactions, to find the synergy of people. For the content-based explicit comments/reviews interactions, some works attempt to utilize them to mine the semantic knowledge to enhance recommender models. However, they still neglect the following two points: (1) The content semantic is a universal world knowledge; how do we extract the multi-aspect semantic information to empower different domains? (2) The user/item ID feature is a fundamental element for recommender models; how do we align the ID and content semantic feature space? In this paper, we propose a `plugin' semantic knowledge transferring method extbf{LoID}, which includes two major components: (1) LoRA-based large language model pretraining to extract multi-aspect semantic information; (2) ID-based contrastive objective to align their feature spaces. We conduct extensive experiments with SOTA baselines on real-world datasets, the detailed results demonstrating significant improvements of our method LoID.
+
+Recommending cold items remains a significant challenge in billion-scale online recommendation systems. While warm items benefit from historical user behaviors, cold items rely solely on content features, limiting their recommendation performance and impacting user experience and revenue. Current models generate synthetic behavioral embeddings from content features but fail to address the core issue: the absence of historical behavior data. To tackle this, we introduce the LLM Simulator framework, which leverages large language models to simulate user interactions for cold items, fundamentally addressing the cold-start problem. However, simply using LLM to traverse all users can introduce significant complexity in billion-scale systems. To manage the computational complexity, we propose a coupled funnel ColdLLM framework for online recommendation. ColdLLM efficiently reduces the number of candidate users from billions to hundreds using a trained coupled filter, allowing the LLM to operate efficiently and effectively on the filtered set. Extensive experiments show that ColdLLM significantly surpasses baselines in cold-start recommendations, including Recall and NDCG metrics. A two-week A/B test also validates that ColdLLM can effectively increase the cold-start period GMV.
+
+
+随着科技的不断发展和人们对电商的认可度日益升高,网上购物已逐渐成为生活中不可或缺的一部分.淘宝,京东等平台深耕C2C领域,自身壮大的同时也改变了传统商业营销模式,推动国内电商业务持续蓬勃发展.行业的进步带来了极大的利润和便利,但其面临的挑战也日益严峻.第一,"数据过载"问题.电商业务的蓬勃使得相关用户及商品数据呈爆发性增长,用户越来越难以从繁杂的数据中及时,精确地找到所需信息.第二,"冷启动"问题.新用户暂时没有相应的历史行为数据,平台无法通过预测向其推荐适配商品,即用户冷启动.物品冷启动同理.面对亟待解决的"数据过载"和"冷启动"等问题,个性化推荐系统应运而生.本文采用文档数据库mongodb,结合基于交替最小二乘(Alternating Least Squares,ALS)的协同过滤算法和二分K-均值(bisecting K-means)聚类算法,使用Spark,flume,Kafka等大数据技术,设计和实现了基于协同过滤的智能电商推荐平台.该平台结合离线统计榜,离线推荐和实时推荐多种推荐方式,聚焦于冷启动和数据过载问题,专注从纷繁庞大的数据群中为用户挖掘适配商品,高效获取有价值的信息.论文主要工作如下:(1)通过实习期间对电商行业的调研和推荐流程的分析,明确本平台的功能及性能需求,并从业务架构和技术层级两个角度进行全局概要设计和子模块的详细分析与设计.(2)针对数据过载现象,本文引入大数据架构,利用Spark,mongodb,flume,Kafka等工具构建高效数据流平台,并建立基于星型模型的业务数据仓库,以拉链表的形式分层级储存用户及商品的缓慢变化维度数据和行为数据,提升了数据存储和处理的效率.(3)以大数据平台为基础,本文利用基于交替最小二乘(Alternating Least Squares,ALS)的协同过滤算法和二分K-均值(bisecting K-means)聚类算法构建了用户-商品混合推荐模型,并引入热点因子,使用top N算法混合推荐.(4)为了解决用户冷启动的问题,本文采用离线统计推荐和新用户标签问卷的形式对新用户的数据进行补充.同时,在实现电商业务的基础上,参考lambda架构离线和实时混合推荐,完成基于协同过滤的智能电商推荐平台.最后,构建测试模型以检测平台的功能完成度及性能水平.
+
+
+协同过滤算法广泛应用于个性化推荐系统中.现有的基于社群相似性的协同过滤算法在新用户新商品的冷启动场景中难以使用,性能较差.对此,提出了一种基于矩阵分解和神经网络映射的冷启动推荐算法.首先,使用矩阵分解方法求出用户在潜在兴趣空间的向量表示;然后,训练神经网络学习从用户属性数据到潜在兴趣向量的映射关系;最后,融合用户的历史评分数据与属性数据各自生成的兴趣向量,给出平滑的推荐预测值.实验表明,当用户的评分记录很少时,预测性能有明显提升,融合用户的属性信息能较好地改善"冷启动"情况下推荐系统的性能.
+
+
+推荐系统中最常见信息过滤技术是基于内容的过滤和协作过滤,协作过滤由于有其自身的优点得到迅速发展,并得到广泛应用,但传统的协作过滤算法存在着稀疏性,扩展性和同义性等问题.本文提出一种基于评价矩阵列向量的图书协作过滤算法,并把这个算法应用到了一个数字图书馆的电子图书推荐系统中.此图书协作过滤算法主要计算图书之间的相似度而不是用户之间的相似度,可以大大降低计算量.实验也表明,这个算法比传统的基于用户的协作过滤算法有优势.
+
+
+知识图谱使用"实体—关系—实体"模型描述数据,其构建包括知识抽取,知识融合,知识推理和更新,知识存储等流程.引入知识图谱的图书馆智能化资源推荐系统分为数据采集,知识图谱构建,智能化推荐三大模块,通过抽取资源信息和用户信息构建信息资源和用户画像知识图谱,然后以智能化的算法实现信息资源的智能推荐.
+
+
+传统运营方式已经难以应对日益复杂的业务场景.特别是电商领域,采用个性化推荐系统对于改善用户体验,促进商品销售,提高广告点击率具有重要意义.文章以电商场景为例,设计了基于机器学习算法的在线推荐系统,并对该系统进行了性能优化.
+
+
+The rapid advancement of artificial intelligence has significantly expanded the role of service robots in everyday life. This expansion necessitates the accurate recognition and prediction of human intentions to provide timely and appropriate services. However, existing methods often struggle to perform effectively in complex and unstructured environments. To address this challenge, we propose the Large language model and Knowledge graph based Intention Recognition Framework (LKIRF), which combines large language model (LLM) with knowledge graphs (KG) to enhance the intention recognition capabilities of service robots. Our approach constructs an offline KG from human motion and environmental data and builds an online reasoning graph through real-time interaction, utilizing LLM for interpretation. Experimental results indicate that compared to traditional methods, LKIRF not only improves prediction accuracy across various scenarios but also enhances the transparency and interpretability of the intention reasoning process.
+
+
+Recommendation systems, as widely implemented nowadays on various platforms, recommend relevant items to users based on their preferences. The classical methods which rely on user-item interaction matrices has limitations, especially in scenarios where there is a lack of interaction data for new items. Knowledge graph (KG)-based recommendation systems have emerged as a promising solution. However, most KG-based methods adopt node embeddings, which do not provide personalized recommendations for different users and cannot generalize well to the new items. To address these limitations, we propose Knowledge-enhanced User-Centric subgraph Network (KUCNet), a subgraph learning approach with graph neural network (GNN) for effective recommendation. KUCNet constructs a U-I subgraph for each user-item pair that captures both the historical information of user-item interactions and the side information provided in KG. An attention-based GNN is designed to encode the U-I subgraphs for recommendation. Considering efficiency, the pruned user-centric computation graph is further introduced such that multiple U-I subgraphs can be simultaneously computed and that the size can be pruned by Personalized PageRank. Our proposed method achieves accurate, efficient, and interpretable recommendations especially for new items. Experimental results demonstrate the superiority of KUCNet over state-of-the-art KG-based and collaborative filtering (CF)-based methods.
+
+
+为使用户-物品评分,社会网络和社会化标签等异构信息融合到协同过滤推荐方法的最近邻寻找过程中,弥补冷启动用户单一维度信息的不足,提出一种多重图排序的冷启动推荐方法.通过分析用户之间可能存在的信任度构建关系网络,利用多重图排序模型得到目标用户的最近邻集合,进而产生目标用户的推荐列表.实验结果表明,与基于用户的协同过滤推荐方法相比,该方法能有效地提高冷启动用户的个性化推荐准确性和推荐覆盖率.
+
+
+《Neo4j图谱分析实战 》详细阐述了与Neo4j图谱分析相关的基本解决方案,主要包括使用Neo4j进行图建模,图算法,基于图的机器学习,生产环境中的Neo4j等内容.此外,本书还提供了相应的示例,代码,以帮助读者进一步理解相关方案的实现过程.本书适合作为高等院校计算机及相关专业的教材和教学参考书,也可作为相关开发人员的自学教材和参考手册.
+
+
+本书从FastAPI框架的基础知识和相关的Python编程概念开始讲解.然后,您将了解该框架的所有方面知识,包括其强大的依赖注入系统,以及如何使用它与数据库通信,实现身份验证和集成机器学习模型等.之后,您将学习与测试和部署相关的很好实践,以运行高质量和健壮的应用程序.最后,您还将学习Python数据科学软件包的应用生态系统.随着学习的深入,您将学习如何使用FastAPI在Python中构建数据科学应用程序.本书还演示了如何开发快速高效的机器学习预测后端,并对其进行测试,以获得很好性能.最后,您将看到如何使用WebSocket和Web浏览器作为客户端实现人脸实时检测.在本书的最后,您不仅学习如何在数据科学项目中实现Python,还学习如何在FastAPI的帮助下维护和设计它们,以满足高编程标准.本书面向对FastAPI及其生态系统感兴趣的数据科学家和软件开发人员,并以此构建数据科学应用程序.读者需要具备数据科学和机器学习概念的基本知识,以及了解如何在Python中应用它们.
+
+
+开放源代码数据库管理系统已经成功地应用到很多系统中,MysQL是其中较出色的一个.它具有功能强,使用简便,管理方便,运行速度快,安全可靠性强等优点.为了快速开发高质量的MySQL的应用程序,从系统平台及开发工具选择,应用程序优化,数据库安全策略等方面提出了可行的解决方案.
+
+
+随着经济全球化的不断发展、互联网时代的到来以及资本市场竞争的不断加剧,使得众多企业的运营模式、市场拓展、管理模式、技术创新、人力资源开发等都面临着巨大的挑战,创新、变革迫在眉睫。其中大型传统集团性企业在这方面的需求尤为迫切。企业信息化将是解决这一问题的有效途径之一,也是必经之路。然而企业信息化是一个系统庞大且复杂的工程,需要在控制时间、人力、经济等成本的前提下,有效地推进信息化。因此,开发一套开发平台将会高效地推进大型企业信息化,这将是本课题研究的主要内容。本课题将研究并开发一套推进大型企业信息化使用的开发平台,主要研究前端框架技术。本课题将运用当前比较优秀的MVVM开发模式,以及主流、最新的前端开发框架Vue.js、Webpack构建技术、iview、element组件等开发企业信息化开发平台的前端部分。该平台为企业信息化通用开发框架,即企业总部及下属分公司的其他开发团队只需要在该平台的基础上开发自己需要的业务系统,开发者将重点放在与系统产品有关的具体业务逻辑的设计与开发上。这样既可提升开发效率,又可节约开发成本,也增强系统的规范性与健壮性。同时,企业的各分公司将使用统一的技术栈,统一的界面风格,这样在各系统的升级、扩展、维护上将会节省大量的开发和维护成本。该开发平台前端开发框架完成的主要工作包括:(1)阐述前后端分离开发的优势和必要性,介绍前端编程语言Java Script、HTML5和CSS3,并对MVVM开发模式进行分析。然后详细介绍Vue.js框架,简单介绍iview前端组件库、Axios技术以及Webpack构建工具等技术。(2)针对开发平台前端开发框架需要的基本功能,结合未来框架使用团队的需求,以及目前主流的技术、产品现状,进行需求分析以及功能模块设计,技术选型,框架开发。(3)搭建项目开发环境、开发通用组件,针对平台的需求分析与产品设计进行模块的开发实现。(4)通过测试该通用开发基础框架的各个功能模块,测试结果证实该框架符合需求设计。最后基于该开发平台进行《报账系统》的实例开发,验证该开发平台的可行性、实用性。
+
+
+随着互联网应用的蓬勃发展,推荐系统作为解决信息过载的有效手段,成为了工业界与学术界的研究热点.面向用户隐式反馈的传统推荐算法主要基于协同过滤和排序学习等方法,但这些方法未充分利用用户行为中的隐式反馈特征.文中提出了一种基于神经网络的用户向量化表示模型,其能够充分利用用户的异构的隐式反馈行为特征.同时,借鉴机器翻译中的self-attention机制,设计了一种神经注意力推荐模型,其融合用户向量化表示和用户-项目交互的动态时序特征以提高推荐系统的性能.在公开数据集上进行对比实验,通过召回率,准确率,NDCG 3个指标评价推荐性能.结果表明,与其他面向隐式反馈的推荐模型相比,所提推荐模型具有更好的推荐性能,并且对用户行为特征具有很好的泛化能力.
+
+
+研究协同过滤推荐系统中的冷启动问题,运用基于内容预测的方法,对系统内未被用户评价过的项目进行评分预测,应用2种优化步骤,过滤掉预测不准确的用户的评分.在此基础上用协同过滤的方法产生推荐,使传统推荐算法中无法推荐给用户的项目得到推荐机会.通过一系列实验证明,该混合推荐算法能保证推荐准确性,提高了新项目的推荐概率.
+[1]刘颖.基于用户行为传播的动态知识图谱推荐系统研究[D].北京建筑大学,2023.
+[2]常亮,张伟涛,古天龙,等.知识图谱的推荐系统综述[J].智能系统学报, 2019(2):10.DOI:10.11992/tis.201805001.
+[3] Yang K , Toni L .Graph-Based Recommendation System[J].IEEE, 2018.DOI:10.1109/GlobalSIP.2018.8646359.
+[4] Xin L , Hongyan M , Jiahao W ,et al.Research on Graph Neural Network Recommendation Method[J].Journal of Computer Engineering & Applications, 2022, 58(10).DOI:10.3778/j.issn.1002-8331.2110-0345.
+[5] Xu W , Xie Q , Yang S ,et al.Enhancing Content-based Recommendation via Large Language Model[J].  2024.DOI:10.1145/3627673.3679913.
+[6] Huang F , Bei Y , Yang Z ,et al.Large Language Model Simulator for Cold-Start Recommendation[J].  2024.
+[7]冯丹阳.基于协同过滤的智能电商推荐平台的研究与实现[D].内蒙古大学,2021.
+[8]魏琳东,黄永峰.融合用户属性信息的冷启动推荐算法[J].电子技术应用, 2017, 43(10):5.DOI:10.16157/j.issn.0258-7998.179020.
+[9]曾庆辉,邱玉辉.一种基于协作过滤的电子图书推荐系统[J].计算机科学, 2005, 32(6):4.DOI:10.3969/j.issn.1002-137X.2005.06.043.
+[10]陈安琪,金昆,陶兴华,等.基于知识图谱的图书馆智能化资源推荐系统架构与优化策略[J].图书馆界, 2023(2):21-25.
+[11]魏芬.基于机器学习算法的在线推荐系统设计与性能优化研究[J].信息与电脑, 2024, 36(3):89-91.
+[12] Zhou J , Su X , Fu W ,et al.Enhancing intention prediction and interpretability in service robots with LLM and KG[J].Scientific Reports[2026-01-12].DOI:10.1038/s41598-024-77916-3.
+[13] Liu G , Yao Q , Zhang Y ,et al.Knowledge-Enhanced Recommendation with User-Centric Subgraph Network[J].IEEE, 2024.DOI:10.1109/ICDE60146.2024.00102.
+[14]毛明松,张富国.基于多重图排序的用户冷启动推荐方法[J].计算机工程, 2019, 45(5):7.DOI:10.19678/j.issn.1000-3428.0050495.
+[15](美) 赛弗 Scifo, Estelle.Neo4j图谱分析实战[M].清华大学出版社,2022.
+[16](法) 沃龙 (Voron, Francois).Python FastAPI构建数据科学应用[M].北京航空航天大学出版社,2022.
+[17]兰旭辉,熊家军,邓刚.基于MySQL的应用程序设计[J].计算机工程与设计, 2004, 25(3):3.DOI:10.3969/j.issn.1000-7024.2004.03.037.
+[18]王志任.基于Vue.js的开发平台的设计与实现[D].广东工业大学[2026-01-12].DOI:CNKI:CDMD:2.1018.865863.
+[19]郭旭,朱敬华.基于用户向量化表示和注意力机制的深度神经网络推荐模型[J].计算机科学, 2019, 046(008):111-115.
+[20]郭艳红,邓贵仕.协同过滤系统项目冷启动的混合推荐算法[J].计算机工程, 2008, 34(23):3.DOI:10.3969/j.issn.1000-3428.2008.23.005.
