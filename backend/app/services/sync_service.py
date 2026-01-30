@@ -85,5 +85,72 @@ class SyncService:
         """
         self.neo4j.run(cypher, user_id=user_id, text=query_text)
 
+    def sync_negative_feedback(
+        self, 
+        user_id: int, 
+        book_id: int, 
+        feedback_type: str,
+        category_name: str = None,
+        author_name: str = None
+    ):
+        """
+        同步负反馈到Neo4j
+        
+        创建以下关系：
+        - (User)-[:DISLIKES]->(Book)  书籍级别负反馈
+        - (User)-[:DISLIKES_CATEGORY]->(Category)  类别级别负反馈
+        - (User)-[:DISLIKES_AUTHOR]->(Author)  作者级别负反馈
+        """
+        # 1. 书籍级别的负反馈
+        cypher_book = """
+        MATCH (u:User {id: $user_id})
+        MATCH (b:Book {id: $book_id})
+        MERGE (u)-[r:DISLIKES]->(b)
+        SET r.feedback_type = $feedback_type,
+            r.strength = 1.0,
+            r.timestamp = datetime()
+        """
+        self.neo4j.run(cypher_book, 
+                      user_id=user_id, 
+                      book_id=book_id, 
+                      feedback_type=feedback_type)
+        
+        # 2. 根据反馈类型同步类别/作者级别的负反馈
+        if feedback_type == "wrong_category" and category_name:
+            # 不喜欢这个类别
+            cypher_category = """
+            MATCH (u:User {id: $user_id})
+            MERGE (c:Category {name: $category_name})
+            MERGE (u)-[r:DISLIKES_CATEGORY]->(c)
+            SET r.strength = 0.8,
+                r.timestamp = datetime()
+            """
+            self.neo4j.run(cypher_category, 
+                          user_id=user_id, 
+                          category_name=category_name)
+        
+        elif feedback_type == "wrong_author" and author_name:
+            # 不喜欢这个作者
+            cypher_author = """
+            MATCH (u:User {id: $user_id})
+            MERGE (a:Author {name: $author_name})
+            MERGE (u)-[r:DISLIKES_AUTHOR]->(a)
+            SET r.strength = 0.8,
+                r.timestamp = datetime()
+            """
+            self.neo4j.run(cypher_author, 
+                          user_id=user_id, 
+                          author_name=author_name)
+
+    def remove_negative_feedback(self, user_id: int, book_id: int):
+        """
+        移除负反馈关系
+        """
+        cypher = """
+        MATCH (u:User {id: $user_id})-[r:DISLIKES]->(b:Book {id: $book_id})
+        DELETE r
+        """
+        self.neo4j.run(cypher, user_id=user_id, book_id=book_id)
+
     def clear_graph(self):
         self.neo4j.run("MATCH (n) DETACH DELETE n")

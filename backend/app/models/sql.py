@@ -24,6 +24,9 @@ class User(Base):
     ratings = relationship("Rating", back_populates="user")
     interactions = relationship("Interaction", back_populates="user")
     search_logs = relationship("SearchLog", back_populates="user")
+    negative_feedbacks = relationship("NegativeFeedback", back_populates="user")
+    recommendation_histories = relationship("RecommendationHistory", back_populates="user")
+    exposure_logs = relationship("ExposureLog", back_populates="user")
 
 class SearchLog(Base):
     __tablename__ = "search_logs"
@@ -53,6 +56,8 @@ class Book(Base):
     category = relationship("Category", back_populates="books")
     ratings = relationship("Rating", back_populates="book")
     interactions = relationship("Interaction", back_populates="book")
+    negative_feedbacks = relationship("NegativeFeedback", back_populates="book")
+    exposure_logs = relationship("ExposureLog", back_populates="book")
 
 class Category(Base):
     __tablename__ = "categories"
@@ -93,7 +98,54 @@ class RecommendationCache(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     recommendations = Column(Text, nullable=False) # JSON string of recommendations
+    is_stale = Column(Boolean, default=False)  # 标记缓存是否待更新
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     updated_at = Column(DateTime(timezone=True), onupdate=func.now())
     
     user = relationship("User")
+
+
+class NegativeFeedback(Base):
+    """负反馈记录表"""
+    __tablename__ = "negative_feedback"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    book_id = Column(Integer, ForeignKey("books.id"), nullable=False, index=True)
+    feedback_type = Column(String(50), nullable=False)  # not_interested, wrong_category, wrong_author, seen_before, other
+    reason = Column(Text, nullable=True)  # 用户填写的具体原因（可选）
+    strength = Column(Integer, default=3)  # 负反馈强度 1-3，3最强
+    is_active = Column(Boolean, default=True)  # 是否有效（支持软删除）
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    user = relationship("User")
+    book = relationship("Book")
+
+
+class RecommendationHistory(Base):
+    """推荐历史记录表（用于滑动窗口去重）"""
+    __tablename__ = "recommendation_history"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    recommended_books = Column(Text, nullable=False)  # JSON数组: [book_id1, book_id2, ...]
+    window_size = Column(Integer, default=50)  # 窗口大小
+    created_at = Column(DateTime(timezone=True), server_default=func.now())
+    updated_at = Column(DateTime(timezone=True), onupdate=func.now())
+    
+    user = relationship("User")
+
+
+class ExposureLog(Base):
+    """曝光记录表（用于隐式负反馈）"""
+    __tablename__ = "exposure_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False, index=True)
+    book_id = Column(Integer, ForeignKey("books.id"), nullable=False, index=True)
+    exposure_count = Column(Integer, default=1)  # 曝光次数
+    click_count = Column(Integer, default=0)  # 点击次数
+    last_exposure_at = Column(DateTime(timezone=True), server_default=func.now())
+    
+    user = relationship("User")
+    book = relationship("Book")

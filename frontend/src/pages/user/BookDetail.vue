@@ -1,21 +1,48 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import UserLayout from '@/layouts/UserLayout.vue'
 import axios from 'axios'
 import { useAuthStore } from '@/stores/auth'
-import { Heart, BookOpen, Star, ArrowLeft, Calendar, Tag, Book, MessageSquare, Send } from 'lucide-vue-next'
+import { Heart, BookOpen, Star, ArrowLeft, Calendar, Tag, Book, MessageSquare, Send, ThumbsDown, X } from 'lucide-vue-next'
 
 const route = useRoute()
 const router = useRouter()
 const authStore = useAuthStore()
 const book = ref<any>(null)
+
+// API基础URL（用于静态资源）
+const API_BASE_URL = 'http://localhost:8000'
+
+// 计算完整的封面URL
+const coverUrl = computed(() => {
+  if (!book.value?.cover_url) return null
+  // 如果已经是完整URL，直接返回
+  if (book.value.cover_url.startsWith('http')) return book.value.cover_url
+  // 否则拼接后端地址
+  return `${API_BASE_URL}${book.value.cover_url}`
+})
 const loading = ref(false)
 const collecting = ref(false)
 
 const newRating = ref(5)
 const newComment = ref('')
 const submittingReview = ref(false)
+
+// 负反馈相关状态
+const showFeedbackModal = ref(false)
+const feedbackType = ref('not_interested')
+const feedbackReason = ref('')
+const submittingFeedback = ref(false)
+
+// 负反馈类型选项
+const feedbackOptions = [
+  { value: 'not_interested', label: '不感兴趣', icon: '🙅' },
+  { value: 'wrong_category', label: '不喜欢这个类别', icon: '📚' },
+  { value: 'wrong_author', label: '不喜欢这个作者', icon: '✍️' },
+  { value: 'seen_before', label: '看过了/不想看', icon: '👀' },
+  { value: 'other', label: '其他原因', icon: '💭' }
+]
 
 const fetchBook = async () => {
   loading.value = true
@@ -88,6 +115,49 @@ const handleReviewSubmit = async () => {
     }
 }
 
+// 负反馈相关函数
+const openFeedbackModal = () => {
+    if (!authStore.token) {
+        router.push('/login')
+        return
+    }
+    showFeedbackModal.value = true
+}
+
+const closeFeedbackModal = () => {
+    showFeedbackModal.value = false
+    feedbackType.value = 'not_interested'
+    feedbackReason.value = ''
+}
+
+const handleNegativeFeedback = async () => {
+    if (!authStore.token) {
+        router.push('/login')
+        return
+    }
+
+    submittingFeedback.value = true
+    try {
+        await axios.post(`/api/books/${book.value.id}/negative-feedback`, {
+            book_id: book.value.id,
+            feedback_type: feedbackType.value,
+            reason: feedbackReason.value || null,
+            strength: 3
+        })
+        alert('感谢您的反馈！我们将减少向您推荐类似内容。')
+        closeFeedbackModal()
+    } catch (e: any) {
+        console.error(e)
+        if (e.response?.status === 401) {
+            router.push('/login')
+        } else {
+            alert('提交反馈失败，请稍后重试')
+        }
+    } finally {
+        submittingFeedback.value = false
+    }
+}
+
 onMounted(fetchBook)
 </script>
 
@@ -115,8 +185,8 @@ onMounted(fetchBook)
           <div class="md:w-2/5 lg:w-1/3 bg-gray-50 relative min-h-[400px] md:min-h-[600px] p-8 flex items-center justify-center">
             <div class="relative w-full max-w-[280px] aspect-[2/3] shadow-2xl rounded-lg overflow-hidden transform transition-transform hover:scale-[1.02] duration-500">
                 <img 
-                    v-if="book.cover_url" 
-                    :src="book.cover_url" 
+                    v-if="coverUrl" 
+                    :src="coverUrl" 
                     :alt="book.title"
                     class="w-full h-full object-cover"
                 />
@@ -128,9 +198,9 @@ onMounted(fetchBook)
             
             <!-- Background Blur Effect -->
             <div 
-                v-if="book.cover_url"
+                v-if="coverUrl"
                 class="absolute inset-0 opacity-10 blur-3xl scale-110 pointer-events-none"
-                :style="{ backgroundImage: `url(${book.cover_url})`, backgroundSize: 'cover', backgroundPosition: 'center' }"
+                :style="{ backgroundImage: `url(${coverUrl})`, backgroundSize: 'cover', backgroundPosition: 'center' }"
             ></div>
           </div>
 
@@ -198,6 +268,13 @@ onMounted(fetchBook)
               >
                   <Heart class="w-5 h-5 transition-transform group-hover:scale-110" :class="{ 'text-pink-500 fill-current': false }" />
                   加入收藏
+              </button>
+              <button 
+                  @click="openFeedbackModal"
+                  class="px-6 py-4 border-2 border-gray-200 text-gray-500 rounded-xl font-medium hover:border-red-300 hover:text-red-500 hover:bg-red-50 transition-all flex items-center justify-center gap-2"
+                  title="不感兴趣"
+              >
+                  <ThumbsDown class="w-5 h-5" />
               </button>
             </div>
           </div>
@@ -290,5 +367,110 @@ onMounted(fetchBook)
             返回图书馆
         </button>
     </div>
+
+    <!-- 负反馈弹窗 -->
+    <Teleport to="body">
+      <Transition name="modal">
+        <div 
+          v-if="showFeedbackModal" 
+          class="fixed inset-0 z-50 flex items-center justify-center p-4"
+        >
+          <!-- 背景遮罩 -->
+          <div 
+            class="absolute inset-0 bg-black/50 backdrop-blur-sm"
+            @click="closeFeedbackModal"
+          ></div>
+          
+          <!-- 弹窗内容 -->
+          <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 animate-fade-in">
+            <!-- 关闭按钮 -->
+            <button 
+              @click="closeFeedbackModal"
+              class="absolute top-4 right-4 p-2 text-gray-400 hover:text-gray-600 transition-colors rounded-full hover:bg-gray-100"
+            >
+              <X class="w-5 h-5" />
+            </button>
+            
+            <!-- 标题 -->
+            <div class="flex items-center gap-3 mb-6">
+              <div class="p-2 bg-red-100 rounded-lg text-red-500">
+                <ThumbsDown class="w-6 h-6" />
+              </div>
+              <div>
+                <h3 class="text-xl font-bold text-gray-900">不感兴趣</h3>
+                <p class="text-sm text-gray-500">告诉我们原因，帮助改进推荐</p>
+              </div>
+            </div>
+            
+            <!-- 反馈类型选择 -->
+            <div class="space-y-2 mb-6">
+              <label 
+                v-for="option in feedbackOptions" 
+                :key="option.value"
+                class="flex items-center gap-3 p-3 rounded-xl border-2 cursor-pointer transition-all"
+                :class="feedbackType === option.value 
+                  ? 'border-red-400 bg-red-50' 
+                  : 'border-gray-100 hover:border-gray-200 hover:bg-gray-50'"
+              >
+                <input 
+                  type="radio" 
+                  :value="option.value" 
+                  v-model="feedbackType"
+                  class="sr-only"
+                />
+                <span class="text-xl">{{ option.icon }}</span>
+                <span class="font-medium text-gray-700">{{ option.label }}</span>
+                <div 
+                  v-if="feedbackType === option.value"
+                  class="ml-auto w-5 h-5 rounded-full bg-red-500 flex items-center justify-center"
+                >
+                  <svg class="w-3 h-3 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+              </label>
+            </div>
+            
+            <!-- 其他原因输入框 -->
+            <div v-if="feedbackType === 'other'" class="mb-6">
+              <textarea
+                v-model="feedbackReason"
+                placeholder="请描述您不感兴趣的原因..."
+                rows="3"
+                class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-red-400 focus:ring-2 focus:ring-red-100 transition-all resize-none"
+              ></textarea>
+            </div>
+            
+            <!-- 按钮 -->
+            <div class="flex gap-3">
+              <button 
+                @click="closeFeedbackModal"
+                class="flex-1 px-6 py-3 border border-gray-200 text-gray-600 rounded-xl font-medium hover:bg-gray-50 transition-colors"
+              >
+                取消
+              </button>
+              <button 
+                @click="handleNegativeFeedback"
+                :disabled="submittingFeedback"
+                class="flex-1 px-6 py-3 bg-red-500 text-white rounded-xl font-medium hover:bg-red-600 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {{ submittingFeedback ? '提交中...' : '确认提交' }}
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </UserLayout>
 </template>
+
+<style scoped>
+.modal-enter-active,
+.modal-leave-active {
+  transition: opacity 0.3s ease;
+}
+.modal-enter-from,
+.modal-leave-to {
+  opacity: 0;
+}
+</style>

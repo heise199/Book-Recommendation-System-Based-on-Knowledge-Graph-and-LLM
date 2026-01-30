@@ -3,13 +3,14 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 import os
 from neo4j import GraphDatabase
+from app.core.config import settings
 
-# MySQL Configuration
-MYSQL_USER = os.getenv("MYSQL_USER", "root")
-MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "123456")
-MYSQL_SERVER = os.getenv("MYSQL_SERVER", "localhost")
-MYSQL_PORT = os.getenv("MYSQL_PORT", "3306")
-MYSQL_DB = os.getenv("MYSQL_DB", "book_rec_sys")
+# MySQL Configuration (使用统一配置)
+MYSQL_USER = settings.MYSQL_USER
+MYSQL_PASSWORD = settings.MYSQL_PASSWORD
+MYSQL_SERVER = settings.MYSQL_SERVER
+MYSQL_PORT = settings.MYSQL_PORT
+MYSQL_DB = settings.MYSQL_DB
 
 SQLALCHEMY_DATABASE_URL = f"mysql+pymysql://{MYSQL_USER}:{MYSQL_PASSWORD}@{MYSQL_SERVER}:{MYSQL_PORT}/{MYSQL_DB}"
 
@@ -22,10 +23,10 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
-# Neo4j Configuration
-NEO4J_URI = os.getenv("NEO4J_URI", "bolt://localhost:7687")
-NEO4J_USER = os.getenv("NEO4J_USER", "neo4j")
-NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD", "mfl,.031104")
+# Neo4j Configuration (使用统一配置)
+NEO4J_URI = settings.NEO4J_URI
+NEO4J_USER = settings.NEO4J_USER
+NEO4J_PASSWORD = settings.NEO4J_PASSWORD
 
 class Neo4jConnection:
     def __init__(self):
